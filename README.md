@@ -1,4 +1,4 @@
-# React Leaflet MGRS Graticule
+# React Leaflet GARS Graticule
 
 This graticule displays Global Area Reference System (GARS) cells on a Leaflet map. See this [website](https://earth-info.nga.mil/GandG/coordsys/grids/gars.html) for more details about what GARS is.
 
