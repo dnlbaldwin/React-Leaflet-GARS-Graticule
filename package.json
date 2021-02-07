@@ -1,0 +1,42 @@
+{
+  "name": "react-leaflet-gars-graticule",
+  "version": "0.0.1",
+  "description": "A React-based GARS graticule for Leaflet using Canvas",
+  "main": "build/Graticule.js",
+  "types": "build/Graticule.d.ts",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "leaflet": "^1.7.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-leaflet": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.5.21",
+    "@types/react-leaflet": "^2.5.2",
+    "tslint": "^6.1.3",
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^4.1.3"
+  },
+  "scripts": {
+    "prepublish": "tsc",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlbaldwin/React-Leaflet-GARS-Graticule.git"
+  },
+  "keywords": [
+    "GARS",
+    "react",
+    "Leaflet"
+  ],
+  "author": "Dan Baldwin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dnlbaldwin/React-Leaflet-GARS-Graticule/issues"
+  },
+  "homepage": "https://github.com/dnlbaldwin/React-Leaflet-GARS-Graticule#readme"
+}
