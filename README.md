@@ -39,6 +39,12 @@ import { LayerGroup, LayersControl, MapContainer, TileLayer } from 'react-leafle
 import './App.css';
 
 import { GarsGraticule } from 'react-leaflet-gars-graticule';
+// Assigning the same name to the overlay as it's named in the control box
+// makes it much easier to toggle it on and off when multiple overlays
+// are employed.
+const garsGraticuleName = 'GARS';
+// Controls whether the overlay is displayed on map load
+const overlayEnabled = true;
 function App() {
   return (
     <MapContainer
@@ -73,13 +79,12 @@ function App() {
         <LayersControl.BaseLayer name="OSM Topo">
           <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" attribution="OSM" />
         </LayersControl.BaseLayer>
-        <LayersControl.Overlay checked name="GARS graticule">
+        <LayersControl.Overlay checked={overlayEnabled} name={garsGraticuleName}>
           <LayerGroup>
-            <GarsGraticule />
+            <GarsGraticule checked={overlayEnabled} name={garsGraticuleName} />
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
-      <GarsGraticule />
     </MapContainer>
   );
 }

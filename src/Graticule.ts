@@ -1,11 +1,15 @@
-import { LatLng, Map, Point } from 'leaflet';
+import { LayersControlEvent, LatLng, Map, Point } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { getGARSLetters, getGARSNumbers } from './utilities';
 
-const GarsGraticule = () => {
+interface Props {
+  name: string;
+  checked: boolean;
+}
+
+const GarsGraticule = (props: Props) => {
   let map = useMap();
-  console.log(map);
-  let g = new Graticule(map);
+  let g = new Graticule(map, props.name, props.checked);
 
   return null;
 };
@@ -30,6 +34,10 @@ type GraticuleProperties = {
   lineColor: string;
 };
 
+interface Options {
+  showGrid: boolean;
+}
+
 /**
  * This class compartmentalizes the functionality required to draw GARS graticules
  */
@@ -39,6 +47,8 @@ class Graticule {
   readonly _ONE_TWELFTH_DEGREE: number = this._QUARTER_DEGREE / 3; // 5 Minutes
   map: Map;
   canvas: HTMLCanvasElement;
+  name: string;
+  options: Options;
 
   showGrid: boolean = true;
 
@@ -57,7 +67,7 @@ class Graticule {
   _FONT: string = '16px Courier New';
   _FONT_COLOUR: string = '#000';
 
-  constructor(map: Map) {
+  constructor(map: Map, name: string, checked: boolean) {
     this.map = map;
     this.canvas = document.createElement('canvas');
     this.canvas.classList.add('leaflet-zoom-animated');
@@ -67,26 +77,44 @@ class Graticule {
       this.map.getPanes().overlayPane.appendChild(this.canvas);
     }
 
+    this.options = {
+      showGrid: true,
+    };
+
     this.map.on('viewreset', this.reset, this);
     this.map.on('move', this.reset, this);
     this.map.on('overlayadd', this.showGraticule, this);
     this.map.on('overlayremove', this.clearRect, this);
 
+    // Strip any spaces as they can't be used in class names
+    this.name = name.replace(/\s/g, '');
+
+    if (checked) {
+      this.options.showGrid = true;
+      this.reset();
+    } else {
+      this.options.showGrid = false;
+    }
+
     // First load
     this.reset();
   }
 
-  clearRect() {
-    let ctx = this.canvas.getContext('2d');
-    if (ctx) {
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.showGrid = false;
+  clearRect(e: LayersControlEvent) {
+    if (e.name === this.name) {
+      let ctx = this.canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.showGrid = false;
+      }
     }
   }
 
-  showGraticule() {
-    this.showGrid = true;
-    this.reset();
+  showGraticule(e: LayersControlEvent) {
+    if (e.name === this.name) {
+      this.showGrid = true;
+      this.reset();
+    }
   }
 
   reset() {
