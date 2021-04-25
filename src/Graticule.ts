@@ -71,30 +71,26 @@ class Graticule {
     this.map = map;
     this.canvas = document.createElement('canvas');
     this.canvas.classList.add('leaflet-zoom-animated');
-
-    // Add the canvas only if it hasn't already been added
-    if (!this.map.getPanes().overlayPane.hasChildNodes()) {
-      this.map.getPanes().overlayPane.appendChild(this.canvas);
-    }
-
+    // Strip any spaces as they can't be used in class names
+    this.name = name.replace(/\s/g, '');
     this.options = {
       showGrid: true,
     };
-
-    this.map.on('viewreset', this.reset, this);
-    this.map.on('move', this.reset, this);
-    this.map.on('overlayadd', this.showGraticule, this);
-    this.map.on('overlayremove', this.clearRect, this);
-
-    // Strip any spaces as they can't be used in class names
-    this.name = name.replace(/\s/g, '');
-
     if (checked) {
       this.options.showGrid = true;
       this.reset();
     } else {
       this.options.showGrid = false;
     }
+    // Add the canvas only if it hasn't already been added
+    if (!this.map.getPanes().overlayPane.classList.contains(this.name)) {
+      this.map.getPanes().overlayPane.appendChild(this.canvas);
+    }
+
+    this.map.on('viewreset', this.reset, this);
+    this.map.on('move', this.reset, this);
+    this.map.on('overlayadd', this.showGraticule, this);
+    this.map.on('overlayremove', this.clearRect, this);
 
     // First load
     this.reset();
