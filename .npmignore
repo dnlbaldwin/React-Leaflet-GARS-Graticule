@@ -1,1 +1,6 @@
-example
+/example
+/.vscode
+/.github
+.prettierignore
+.prettierrc
+tslint.json

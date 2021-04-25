@@ -1,12 +1,10 @@
 import { LatLng, Map, Point } from 'leaflet';
+import { useMap } from 'react-leaflet';
 import { getGARSLetters, getGARSNumbers } from './utilities';
 
-/**
- * This function wraps the Graticule class and accepts the map instance from react-leaflet
- * @param {Map} map - The instance of the Leaflet map being passed from the MapConsumer
- * @returns null
- */
-const GarsGraticule = (map: Map) => {
+const GarsGraticule = () => {
+  let map = useMap();
+  console.log(map);
   let g = new Graticule(map);
 
   return null;
@@ -42,7 +40,9 @@ class Graticule {
   map: Map;
   canvas: HTMLCanvasElement;
 
-  _THIRTY_MINUTES_MIN_ZOOM: number = 10;
+  showGrid: boolean = true;
+
+  _THIRTY_MINUTES_MIN_ZOOM: number = 8;
   _FIFTEEN_MINUTES_MIN_ZOOM: number = 11;
   _FIVE_MINUTES_MIN_ZOOM: number = 12;
 
@@ -69,13 +69,26 @@ class Graticule {
 
     this.map.on('viewreset', this.reset, this);
     this.map.on('move', this.reset, this);
+    this.map.on('overlayadd', this.showGraticule, this);
+    this.map.on('overlayremove', this.clearRect, this);
 
     // First load
     this.reset();
   }
-  /**
-   *
-   */
+
+  clearRect() {
+    let ctx = this.canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.showGrid = false;
+    }
+  }
+
+  showGraticule() {
+    this.showGrid = true;
+    this.reset();
+  }
+
   reset() {
     const mapSize: Point = this.map.getSize();
     const mapLeftTop: Point = this.map.containerPointToLayerPoint([0, 0]);
