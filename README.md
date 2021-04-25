@@ -1,6 +1,6 @@
 # React Leaflet GARS Graticule
 
-This graticule displays Global Area Reference System (GARS) cells on a Leaflet map. See this [website](https://earth-info.nga.mil/GandG/coordsys/grids/gars.html) for more details about what GARS is.
+This graticule displays Global Area Reference System (GARS) cells on a Leaflet map. See this [website](https://en.wikipedia.org/wiki/Global_Area_Reference_System) for more details about what GARS is.
 
 See known issues [HERE](https://github.com/dnlbaldwin/React-Leaflet-GARS-Graticule/issues)
 
@@ -35,7 +35,7 @@ No unit tests at this time.
 ## Usage
 
 ```js
-import { MapConsumer, MapContainer, TileLayer } from 'react-leaflet';
+import { LayerGroup, LayersControl, MapContainer, TileLayer } from 'react-leaflet';
 import './App.css';
 
 import { GarsGraticule } from 'react-leaflet-gars-graticule';
@@ -43,7 +43,7 @@ function App() {
   return (
     <MapContainer
       center={[45.4, -75.7]}
-      zoom={11}
+      zoom={8}
       minZoom={3}
       maxZoom={16}
       maxBounds={[
@@ -51,16 +51,35 @@ function App() {
         [90, 180],
       ]}
     >
-      <TileLayer
-        url="https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        attribution='&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri"></a> contributors'
-      />
-      <MapConsumer>
-        {(map) => {
-          GarsGraticule(map);
-          return null;
-        }}
-      </MapConsumer>
+      <LayersControl position="topright">
+        <LayersControl.BaseLayer checked name="ESRI Satellite">
+          <TileLayer
+            url="https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution='&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri"></a> contributors'
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="ESRI Clarity">
+          <TileLayer
+            url="https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution='&copy; <a href="https://wiki.openstreetmap.org/wiki/Esri"></a> contributors'
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="OSM Topo">
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="OSM Topo">
+          <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" attribution="OSM" />
+        </LayersControl.BaseLayer>
+        <LayersControl.Overlay checked name="GARS graticule">
+          <LayerGroup>
+            <GarsGraticule />
+          </LayerGroup>
+        </LayersControl.Overlay>
+      </LayersControl>
+      <GarsGraticule />
     </MapContainer>
   );
 }
@@ -72,7 +91,7 @@ export default App;
 
 - Make graticule colours configurable
 - Make label visibility configurable
-- Add labels for higher resolutions
+- Investigate adding labels for high zoom levels, and refactoring how labels are displayed for low zoom levels
 
 ## License
 
