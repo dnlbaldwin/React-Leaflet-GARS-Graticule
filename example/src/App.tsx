@@ -6,7 +6,7 @@ function App() {
   return (
     <MapContainer
       center={[45.4, -75.7]}
-      zoom={7}
+      zoom={8}
       minZoom={3}
       maxZoom={16}
       maxBounds={[
