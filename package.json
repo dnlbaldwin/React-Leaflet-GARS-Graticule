@@ -1,6 +1,6 @@
 {
   "name": "react-leaflet-gars-graticule",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A React-based GARS graticule for Leaflet using Canvas",
   "main": "build/Graticule.js",
   "types": "build/Graticule.d.ts",
