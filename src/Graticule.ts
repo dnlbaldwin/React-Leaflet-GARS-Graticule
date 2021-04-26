@@ -50,8 +50,6 @@ class Graticule {
   name: string;
   options: Options;
 
-  showGrid: boolean = true;
-
   _THIRTY_MINUTES_MIN_ZOOM: number = 8;
   _FIFTEEN_MINUTES_MIN_ZOOM: number = 11;
   _FIVE_MINUTES_MIN_ZOOM: number = 12;
@@ -98,20 +96,20 @@ class Graticule {
       let ctx = this.canvas.getContext('2d');
       if (ctx) {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.showGrid = false;
+        this.options.showGrid = false;
       }
     }
   }
 
   showGraticule(e: LayersControlEvent) {
     if (e.name === this.name) {
-      this.showGrid = true;
+      this.options.showGrid = true;
       this.reset();
     }
   }
 
   reset() {
-    if (this.showGrid) {
+    if (this.options.showGrid) {
       const mapSize: Point = this.map.getSize();
       const mapLeftTop: Point = this.map.containerPointToLayerPoint([0, 0]);
       this.canvas.style['transform'] = `translate3d(${mapLeftTop.x}px,${mapLeftTop.y}px,0)`;
