@@ -91,9 +91,6 @@ class Graticule {
     this.map.on('move', this.reset, this);
     this.map.on('overlayadd', this.showGraticule, this);
     this.map.on('overlayremove', this.clearRect, this);
-
-    // First load
-    this.reset();
   }
 
   clearRect(e: LayersControlEvent) {
@@ -114,22 +111,24 @@ class Graticule {
   }
 
   reset() {
-    const mapSize: Point = this.map.getSize();
-    const mapLeftTop: Point = this.map.containerPointToLayerPoint([0, 0]);
-    this.canvas.style['transform'] = `translate3d(${mapLeftTop.x}px,${mapLeftTop.y}px,0)`;
+    if (this.showGrid) {
+      const mapSize: Point = this.map.getSize();
+      const mapLeftTop: Point = this.map.containerPointToLayerPoint([0, 0]);
+      this.canvas.style['transform'] = `translate3d(${mapLeftTop.x}px,${mapLeftTop.y}px,0)`;
 
-    this.canvas.width = mapSize.x;
-    this.canvas.height = mapSize.y;
+      this.canvas.width = mapSize.x;
+      this.canvas.height = mapSize.y;
 
-    let ctx = this.canvas.getContext('2d');
+      let ctx = this.canvas.getContext('2d');
 
-    if (ctx) {
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      if (ctx) {
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      this.drawFiveMinuteGraticules(ctx);
-      this.drawFifteenMinuteGraticules(ctx);
-      this.drawThirtyMinuteGraticules(ctx);
-      this.drawLabels(ctx);
+        this.drawFiveMinuteGraticules(ctx);
+        this.drawFifteenMinuteGraticules(ctx);
+        this.drawThirtyMinuteGraticules(ctx);
+        this.drawLabels(ctx);
+      }
     }
   }
 
